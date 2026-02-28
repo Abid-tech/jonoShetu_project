@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import './App.css'
+import Registration from '../src/components/registration'
 
 function App() {
   
   return (
     <>
-      
+      <Registration/>
     </>
   )
 }
