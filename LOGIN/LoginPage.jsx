@@ -16,15 +16,15 @@ const LoginPage = () => {
             </p>
           </div>
 
-          {/* Email */}
+          {/* NID */}
           <div className="mb-3">
             <label className="form-label fw-semibold">
-              ইমেইল
+              NID
             </label>
             <input
-              type="email"
+              type="text"
               className={`form-control ${styles.input}`}
-              placeholder="আপনার ইমেইল লিখুন"
+              placeholder="আপনার NID লিখুন"
             />
           </div>
 
