@@ -35,73 +35,14 @@ body {
 }
 
 /* ── Wrapper ────────────────────────────────────────────── */
-.jonsetu-wrapper {
-  display: flex;
-  flex-direction: column;
+.jonosetu-wrapper {
   min-height: 100vh;
-  background: var(--off-white);
-  background-image:
-    radial-gradient(
-      circle at 15% 20%,
-      rgba(233, 30, 99, 0.06) 0%,
-      transparent 45%
-    ),
-    radial-gradient(
-      circle at 85% 75%,
-      rgba(0, 106, 78, 0.07) 0%,
-      transparent 45%
-    );
   font-family: "Noto Sans Bengali", sans-serif;
 }
 
-/* ── Header ─────────────────────────────────────────────── */
-.jonsetu-header {
-  background: var(--green);
-  box-shadow: 0 2px 16px rgba(0, 106, 78, 0.25);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-}
-
-.brand-name {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--white);
-  letter-spacing: -0.02em;
-}
-
-.nav-link-custom {
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 500;
-  padding: 6px 14px;
-  border-radius: 20px;
-  transition: all 0.2s ease;
-}
-
-.nav-link-custom:hover {
-  color: var(--white);
-  background: rgba(255, 255, 255, 0.15);
-}
 
 /* ── Main ───────────────────────────────────────────────── */
-.jonsetu-main {
-  flex: 1;
-  padding: 3rem 1rem;
-}
+
 
 /* ── Registration Card ──────────────────────────────────── */
 .registration-card {
@@ -202,11 +143,11 @@ body {
 }
 
 /* ── Photo Slots ─────────────────────────────────────────── */
-.photo-slots-grid {
+/* .photo-slots-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-}
+} */
 
 /* Outer wrapper for each slot */
 .photo-slot {
@@ -387,7 +328,7 @@ body {
   color: var(--green-dark);
 }
 
-/* ── Register Button ────────────────────────────────────── */
+/* Register Button */
 .btn-register {
   background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%);
   color: var(--white);
@@ -417,7 +358,7 @@ body {
   transform: translateY(0);
 }
 
-/* ── Footer ─────────────────────────────────────────────── */
+/* Footer */
 .jonsetu-footer {
   background: var(--green-dark);
   color: rgba(255, 255, 255, 0.85);
@@ -447,7 +388,7 @@ body {
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* ── Lightbox ───────────────────────────────────────────── */
+/*  Lightbox */
 .lightbox-overlay {
   position: fixed;
   inset: 0;
@@ -527,7 +468,7 @@ body {
   transform: scale(1.1);
 }
 
-/* ── Responsive ─────────────────────────────────────────── */
+/* Responsive */
 @media (max-width: 576px) {
   .card-body-inner {
     padding: 1.6rem 1.4rem 2rem;
