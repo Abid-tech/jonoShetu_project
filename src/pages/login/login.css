@@ -2,12 +2,10 @@
 
 .wrapper {
   min-height: 100vh;
-  background: linear-gradient(135deg, #fce4ec, #e0f2ed);
   font-family: "Noto Sans Bengali", sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
 
 .loginCard {
@@ -18,7 +16,7 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   background-color: #ffffff;
   padding: 30px 25px;
-  text-align: center;
+  text-align: left;
 }
 
 .iconCircle {
