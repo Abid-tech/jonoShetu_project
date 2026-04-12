@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap"); 
+
+.wrapper {
+  min-height: 100vh;
+  font-family: "Noto Sans Bengali", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.title {
+  font-weight: 800;
+  color: #1a2e26;
+  margin-bottom: 5px;
+  font-size: 1.6rem;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #4a6355;
+}
+
+.input {
+  border: 2px solid #d0e8df;
+  border-radius: 10px;
+  padding: 12px 15px;
+  background-color: #f8faf9;
+  font-family: "Noto Sans Bengali", sans-serif;
+  transition: all 0.2s ease-in-out;
+}
+
+.input:focus {
+  border-color: #006a4e;
+  box-shadow: 0 0 8px rgba(0, 106, 78, 0.2);
+}
+
+.loginBtn {
+  background: linear-gradient(135deg, #e91e63, #c2185b);
+  color: #fff;
+  font-weight: 700;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  transition: 0.3s ease;
+}
+
+.loginBtn:hover {
+  background: linear-gradient(135deg, #f06292, #e91e63);
+  transform: translateY(-2px);
+}
+
+.forgot {
+  color: #006a4e;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+
+.adminCard {
+  width: 100%;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  padding: 30px 25px;
+  text-align: left;
+  margin: 50px 0;
+}

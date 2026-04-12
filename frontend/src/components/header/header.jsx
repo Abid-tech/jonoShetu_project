@@ -18,7 +18,7 @@ function Header() {
             <ul className="navbar-nav ms-auto">
 
               <li className="nav-item">
-                <Link className="nav-link" to="/referendrum">
+                <Link className="nav-link" to="/referendum">
                   গনভোট
                 </Link>
               </li>
