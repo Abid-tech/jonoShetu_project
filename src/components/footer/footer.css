@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap");
+
+:root {
+  --bangla-font :  "Noto Sans Bengali", sans-serif;
+  --pink-color : #E91E63 ;
+  --green-color : #006A4E ;
+}
+
+/* Footer start */
+#footer{
+    background-color: var(--green-color);
+}
+.footer-body h3{
+    font-family: var(--bangla-font);
+    font-size: 16px;
+}
