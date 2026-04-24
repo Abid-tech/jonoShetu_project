@@ -10,13 +10,23 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD:frontend/package.json
     "axios": "^1.15.0",
+=======
+    "@google-cloud/vision": "^5.3.5",
+    "bcryptjs": "^3.0.3",
+>>>>>>> e317dc5d1e4f0752ec699b1d44d1d835c39860b6:package.json
     "leaflet": "^1.9.4",
+    "multer": "^2.1.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.13.1",
+<<<<<<< HEAD:frontend/package.json
     "recharts": "^3.8.1"
+=======
+    "tesseract.js": "^7.0.0"
+>>>>>>> e317dc5d1e4f0752ec699b1d44d1d835c39860b6:package.json
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
