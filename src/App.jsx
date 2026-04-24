@@ -6,6 +6,8 @@ import Home from './pages/home/home';
 import Complaint from './pages/complaint/complaint';
 import Registration from './pages/registration/registration';
 import LoginPage from "./pages/login/login";
+import NoticeBoard from "./pages/noticeboard/noticeBoard";
+import GovLinks from "./pages/govlinks/govLinks";
 
 function App() {
 
@@ -21,6 +23,8 @@ function App() {
               <Route path="/complaint" element={<Complaint />} />
               <Route path="/registration" element={<Registration />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/notice-board" element={<NoticeBoard />} />
+              <Route path="/govt-links" element={<GovLinks />} />
             </Routes>
           </div>
 
@@ -31,4 +35,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
