@@ -1,0 +1,121 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap"); 
+
+.wrapper {
+  min-height: 100vh;
+  font-family: "Noto Sans Bengali", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.title {
+  font-weight: 800;
+  color: #1a2e26;
+  margin-bottom: 5px;
+  font-size: 1.6rem;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #4a6355;
+}
+
+.input {
+  border: 2px solid #d0e8df;
+  border-radius: 10px;
+  padding: 12px 15px;
+  background-color: #f8faf9;
+  font-family: "Noto Sans Bengali", sans-serif;
+  transition: all 0.2s ease-in-out;
+}
+
+.input:focus {
+  border-color: #006a4e;
+  box-shadow: 0 0 8px rgba(0, 106, 78, 0.2);
+}
+
+.yesBtn{
+    background-color: #006A4E!important; 
+    color: #fff;
+    font-weight: 700;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    transition: 0.3s ease;
+    border: 2px solid #006A4E!important;
+}
+
+.yesBtn:hover {
+  border: 2px solid #006A4E!important;
+  background-color: transparent!important;
+  /* transform: translateY(-2px); */
+}
+
+.noBtn{
+    background-color: #E91E63!important; 
+    color: #fff;
+    font-weight: 700;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    transition: 0.3s ease;
+    border: 2px solid #E91E63!important;
+}
+
+.noBtn:hover {
+  border: 2px solid #E91E63!important;
+  background-color: transparent!important;
+  /* transform: translateY(-2px); */
+}
+
+
+
+.forgot {
+  color: #006a4e;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+
+.adminCard {
+  width: 100%;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  padding: 30px 25px;
+  text-align: left;
+  margin: 50px 0;
+}
+.vote-result h3{
+    font-size: 24px;
+}
+
+
+
+.countdown-timer {
+  background: linear-gradient(135deg, #f25f90 0%, #E91E63 100%);
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin: 5px auto;
+  display: inline-block;
+  min-width: 300px;
+}
+
+.timer-label {
+  color: white;
+  font-size: 20px;
+  margin: 0;
+  opacity: 0.9;
+  font-weight: bold;
+}
+
+.timer-value {
+  color: #ffeb3b;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 5px 0 0 0;
+  font-family: monospace;
+}

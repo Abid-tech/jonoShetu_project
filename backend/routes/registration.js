@@ -1,6 +1,7 @@
 const express    = require("express");
 const router     = express.Router();
-const upload     = require("../middleware/upload");
+const path = require("path");
+const upload = require(path.join(__dirname, "../middleware/upload"));
 const { registerUser, checkNID } = require("../controller/registrationController");
 
 // POST /register
