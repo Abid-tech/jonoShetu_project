@@ -1,3 +1,4 @@
+import ComplaintManagement from './pages/admin/ComplaintManagement';
 import { Routes, Route } from "react-router-dom";
 import './App.css'
 import Header from "./components/header/header";
@@ -32,6 +33,7 @@ function App() {
               <Route path="/notice-board" element={<NoticeBoard />} />
               <Route path="/govt-links" element={<GovLinks />} />
               <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/admin/complaints" element={<ComplaintManagement />} />
 
             </Routes>
           </div>

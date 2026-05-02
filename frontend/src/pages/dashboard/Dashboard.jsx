@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import Heatmap from './Heatmap';
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid,
   BarChart, Bar, ResponsiveContainer, Cell,
@@ -315,6 +316,7 @@ function Dashboard() {
           )}
         </div>
       )}
+      <Heatmap />
     </div>
   );
 }
