@@ -2,6 +2,7 @@ import {React,useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import "./complaint.css"
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -102,6 +103,7 @@ function Complaint() {
     const [locationFile, setLocationFile] = useState(null);
     const locationRef = useRef(null);
     const [location, setLocation] = useState(null); 
+    const navigate = useNavigate();
 
     const handleFileSelect = (e) => {
     const file = e.target.files[0];
@@ -118,6 +120,10 @@ function Complaint() {
     setDistrict("");
     setDescription("");
     setLocationFile(null);
+      e.preventDefault();
+  navigate("/assign-role", {
+    state: { name, dept: department, district, desc: description },
+  });
     };
 
   return (

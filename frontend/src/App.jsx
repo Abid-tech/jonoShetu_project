@@ -11,6 +11,8 @@ import Referendum from "./pages/referendum/referendum";
 import NoticeBoard from "./pages/noticeboard/noticeBoard";
 import GovLinks from "./pages/govlinks/govLinks";
 import Dashboard from "./pages/dashboard/Dashboard";
+import AssignRole from "./pages/assign_role_to_complain/assignRole";
+import ComplainProgress from "./pages/complain-progress/complainProgress";
 
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
               <Route path="/notice-board" element={<NoticeBoard />} />
               <Route path="/govt-links" element={<GovLinks />} />
               <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/assign-role" element={<AssignRole />} />
+              <Route path="/complain-progress" element={<ComplainProgress />} />
 
             </Routes>
           </div>

@@ -1,0 +1,301 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap");
+
+:root {
+  --green: #006a4e;
+  --green-light: #e0f2ed;
+  --green-dark: #004d38;
+  --pink: #e91e63;
+  --pink-dark: #c2185b;
+  --white: #ffffff;
+  --off-white: #f8faf9;
+  --text-dark: #1a2e26;
+  --text-mid: #4a6355;
+  --text-light: #7a9688;
+  --border: #d0e8df;
+  --radius: 16px;
+  --radius-sm: 8px;
+}
+
+.ar-wrapper {
+  min-height: 100vh;
+  background: #f0f7f4;
+  padding: 2rem 1rem;
+  font-family: "Noto Sans Bengali", sans-serif;
+}
+
+/* Header */
+.ar-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.ar-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+.ar-subtitle {
+  color: var(--text-mid);
+  font-size: 0.9rem;
+}
+
+/* Stats Row */
+.ar-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  max-width: 860px;
+  margin: 0 auto 2rem;
+}
+.ar-stat-card {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  border: 0.5px solid var(--border);
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ar-stat-num {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--green);
+}
+.ar-stat-label {
+  font-size: 0.78rem;
+  color: var(--text-mid);
+}
+.ar-stat-card.pink .ar-stat-num  { color: var(--pink); }
+.ar-stat-card.amber .ar-stat-num { color: #b45309; }
+
+/* Complaints Grid */
+.ar-complaints-grid {
+  max-width: 860px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+/* Complaint Card */
+.ar-complaint-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 0.5px solid var(--border);
+  padding: 1.25rem 1.4rem;
+  animation: arFadeIn 0.35s ease;
+}
+@keyframes arFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ar-complaint-card.assigned { border-left: 4px solid var(--green); }
+.ar-complaint-card.pending  { border-left: 4px solid var(--pink);  }
+
+.ar-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.ar-card-meta { display: flex; flex-direction: column; gap: 3px; }
+.ar-card-id   { font-size: 0.75rem; color: var(--text-light); }
+.ar-card-name { font-size: 1rem; font-weight: 700; color: var(--text-dark); }
+
+.ar-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.ar-badge-pending  { background: #fce7ee; color: #9d174d; }
+.ar-badge-assigned { background: var(--green-light); color: var(--green-dark); }
+
+.ar-card-details {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.ar-detail-tag {
+  font-size: 0.78rem;
+  color: var(--text-mid);
+  background: var(--off-white);
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 10px;
+}
+
+.ar-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+/* Assign Area */
+.ar-assign-area {
+  border-top: 0.5px solid var(--border);
+  padding-top: 12px;
+}
+.ar-assign-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+.ar-assign-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.ar-select {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  background: var(--off-white);
+  flex: 1;
+  min-width: 160px;
+  font-family: inherit;
+  cursor: pointer;
+}
+.ar-select:focus {
+  outline: none;
+  border-color: var(--green);
+  background: var(--white);
+}
+.ar-btn-assign {
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 8px 18px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: opacity 0.2s;
+}
+.ar-btn-assign:hover { opacity: 0.88; }
+
+.ar-btn-unassign {
+  background: transparent;
+  color: var(--pink);
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 8px 14px;
+  border: 1.5px solid var(--pink);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.ar-btn-unassign:hover { background: #fce7ee; }
+
+/* Assigned person display */
+.ar-assigned-person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.ar-person-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--green-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: var(--green-dark);
+  flex-shrink: 0;
+}
+.ar-person-info .ar-pname {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+.ar-person-info .ar-prole {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin: 0;
+}
+.ar-no-staff {
+  font-size: 0.8rem;
+  color: var(--pink);
+  margin-top: 6px;
+}
+
+/* Personnel Panel */
+.ar-personnel-panel {
+  max-width: 860px;
+  margin: 2rem auto 0;
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 0.5px solid var(--border);
+  padding: 1.25rem 1.4rem;
+}
+.ar-panel-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+}
+.ar-personnel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.ar-person-card {
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--off-white);
+  transition: background 0.2s;
+}
+.ar-person-card.busy { background: #fce7ee; border-color: #f9a8c9; }
+.ar-pa {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.78rem;
+  flex-shrink: 0;
+  background: var(--green-light);
+  color: var(--green-dark);
+}
+.ar-person-card.busy .ar-pa { background: #fce7ee; color: #9d174d; }
+.ar-pi .ar-pn { font-size: 0.85rem; font-weight: 700; color: var(--text-dark); margin: 0; }
+.ar-pi .ar-ps { font-size: 0.72rem; color: var(--text-light); margin: 0; }
+.ar-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.dot-free { background: #22c55e; }
+.dot-busy { background: var(--pink); }
+
+@media (max-width: 576px) {
+  .ar-title { font-size: 1.4rem; }
+  .ar-complaint-card { padding: 1rem 1rem; }
+}
