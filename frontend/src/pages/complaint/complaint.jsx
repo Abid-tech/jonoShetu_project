@@ -1,7 +1,12 @@
 import { React, useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+<<<<<<< samia/features
 import "./complaint.css";
+=======
+import "./complaint.css"
+import { useNavigate } from "react-router-dom";
+>>>>>>> development
 
 const DEPARTMENTS = ["ঢাকা", "চট্টগ্রাম", "খুলনা", "রাজশাহী", "সিলেট", "বরিশাল", "রংপুর", "ময়মনসিংহ"];
 
@@ -36,6 +41,7 @@ const MapSelector = ({ location, setLocation }) => {
 };
 
 function Complaint() {
+<<<<<<< samia/features
   const [name, setName] = useState("");
   const [department, setDepartment] = useState("");
   const [district, setDistrict] = useState("");
@@ -56,6 +62,37 @@ function Complaint() {
       district: district,
       description: description.trim(),
       location: location ? { lat: location.lat, lng: location.lng } : null
+=======
+
+    const [name, setName] = useState("");
+    const [department, setDepartment] = useState("");
+    const [district, setDistrict] = useState("");
+    const [description, setDescription] = useState("");
+    const [locationFile, setLocationFile] = useState(null);
+    const locationRef = useRef(null);
+    const [location, setLocation] = useState(null); 
+    const navigate = useNavigate();
+
+    const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setLocationFile({ url: URL.createObjectURL(file), name: file.name });
+    e.target.value = "";
+    };
+
+    const handleSubmit = (e) => {
+    e.preventDefault();
+    alert("অভিযোগ সফলভাবে জমা হয়েছে!");
+    setName("");
+    setDepartment("");
+    setDistrict("");
+    setDescription("");
+    setLocationFile(null);
+      e.preventDefault();
+  navigate("/assign-role", {
+    state: { name, dept: department, district, desc: description },
+  });
+>>>>>>> development
     };
     
     try {
