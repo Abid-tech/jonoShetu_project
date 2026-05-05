@@ -1,18 +1,8 @@
 const User = require("../models/User");
 
-// ── POST /register ────────────────────────────────────────
 const registerUser = async (req, res) => {
   try {
-    // 1. Check images
-    if (!req.files?.frontImage || !req.files?.backImage) {
-      return res.status(400).json({
-        success: false,
-        message: "উভয় ছবি আপলোড করা আবশ্যক।",
-        error: "MISSING_IMAGES",
-      });
-    }
-
-    // 2. Destructure all fields from req.body
+    // Destructure all fields from req.body
     const {
       nidNumber,
       fullName,
@@ -22,15 +12,24 @@ const registerUser = async (req, res) => {
       address,
       bloodGroup,
       phone,
+      role,
       password,
     } = req.body;
 
-    // 3. Validate required fields
+    // Validate required fields
     if (!nidNumber?.trim()) {
       return res.status(400).json({
         success: false,
         message: "এনআইডি নম্বর দেওয়া আবশ্যক।",
         error: "MISSING_NID",
+      });
+    }
+
+    if (!fullName?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "পূর্ণ নাম দেওয়া আবশ্যক।",
+        error: "MISSING_NAME",
       });
     }
 
@@ -42,7 +41,7 @@ const registerUser = async (req, res) => {
       });
     }
 
-    // Bangladeshi phone: must start with 01 and be 11 digits
+    // Bangladeshi phone validation
     const phoneRegex = /^01[3-9]\d{8}$/;
     if (!phoneRegex.test(phone.trim())) {
       return res.status(400).json({
@@ -60,7 +59,7 @@ const registerUser = async (req, res) => {
       });
     }
 
-    // 4. Duplicate checks
+    // Duplicate checks
     const existingNID = await User.findOne({ nidNumber: nidNumber.trim() });
     if (existingNID) {
       return res.status(409).json({
@@ -79,7 +78,7 @@ const registerUser = async (req, res) => {
       });
     }
 
-    // 5. Save to MongoDB (password auto-hashed via pre-save hook)
+    // Save to MongoDB (without image URLs)
     const user = await User.create({
       nidNumber:     nidNumber.trim(),
       fullName:      fullName?.trim()    || "",
@@ -89,9 +88,8 @@ const registerUser = async (req, res) => {
       address:       address?.trim()     || "",
       bloodGroup:    bloodGroup?.trim()  || "",
       phone:         phone.trim(),
+      role:          role === "authority" ? "authority" : "citizen",
       password:      password,
-      frontImageUrl: `/uploads/${req.files.frontImage[0].filename}`,
-      backImageUrl:  `/uploads/${req.files.backImage[0].filename}`,
     });
 
     return res.status(201).json({
@@ -107,6 +105,7 @@ const registerUser = async (req, res) => {
         address:     user.address,
         bloodGroup:  user.bloodGroup,
         phone:       user.phone,
+        role:        user.role,
         createdAt:   user.createdAt,
       },
     });
@@ -121,7 +120,6 @@ const registerUser = async (req, res) => {
   }
 };
 
-// ── GET /register/check/:nidNumber ────────────────────────
 const checkNID = async (req, res) => {
   try {
     const exists = await User.findOne({ nidNumber: req.params.nidNumber.trim() });

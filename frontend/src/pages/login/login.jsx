@@ -24,16 +24,23 @@ const LoginPage = () => {
       const data = await res.json();
 
       if (res.ok) {
-        // Save masked phone + raw nid for OTP page
-        sessionStorage.setItem("otp_phone", data.phone);
-        sessionStorage.setItem("otp_phone_raw", nidNumber);
-
-        // 🔥 Redirect to OTP page
-        window.location.href = "/verify-otp";
+        // Store user info in localStorage or sessionStorage
+        localStorage.setItem("user", JSON.stringify(data.data));
+        
+        // Redirect based on role
+        if (data.data.role === "admin") {
+          window.location.href = "/admin";  // Redirect to your existing admin page
+        }
+        else if (data.data.role === "authority") {
+          window.location.href = "/authority";
+        } else {
+          window.location.href = "/";
+        }
       } else {
         setError(data.message || "লগইন ব্যর্থ");
       }
     } catch (err) {
+      console.error("Login error:", err);
       setError("সার্ভার ত্রুটি, আবার চেষ্টা করুন");
     } finally {
       setLoading(false);
@@ -64,14 +71,13 @@ const LoginPage = () => {
           </p>
         </div>
 
-        {/* 🔥 FORM */}
         <form onSubmit={handleLogin}>
 
           {/* Error Message */}
           {error && (
-            <p style={{ color: "red", marginBottom: "10px" }}>
+            <div className="alert alert-danger mb-3" role="alert">
               {error}
-            </p>
+            </div>
           )}
 
           {/* NID */}
@@ -84,6 +90,7 @@ const LoginPage = () => {
               value={nidNumber}
               onChange={(e) => setNidNumber(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
@@ -97,6 +104,7 @@ const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
@@ -106,11 +114,21 @@ const LoginPage = () => {
             className="btn w-100 loginBtn"
             disabled={loading}
           >
-            {loading ? "লোড হচ্ছে..." : "লগইন করুন"}
+            {loading ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                লোড হচ্ছে...
+              </>
+            ) : (
+              "লগইন করুন"
+            )}
           </button>
 
-          <div className="text-center mt-3">
-            <small className="forgot">পাসওয়ার্ড ভুলে গেছেন?</small>
+          <div className="text-center mt-2">
+            <small>
+              অ্যাকাউন্ট নেই?{" "}
+              <a href="/registration" className="text-success fw-bold">নিবন্ধন করুন</a>
+            </small>
           </div>
 
         </form>
