@@ -1,3 +1,4 @@
+import ComplaintManagement from './pages/admin/ComplaintManagement';
 import { Routes, Route } from "react-router-dom";
 import './App.css'
 import Header from "./components/header/header";
@@ -34,8 +35,12 @@ function App() {
               <Route path="/notice-board" element={<NoticeBoard />} />
               <Route path="/govt-links" element={<GovLinks />} />
               <Route path="/Dashboard" element={<Dashboard />} />
+<<<<<<< samia/features
+              <Route path="/admin/complaints" element={<ComplaintManagement />} />
+=======
               <Route path="/assign-role" element={<AssignRole />} />
               <Route path="/complain-progress" element={<ComplainProgress />} />
+>>>>>>> development
 
             </Routes>
           </div>
