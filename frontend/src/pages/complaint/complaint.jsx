@@ -2,6 +2,8 @@ import { React, useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import "./complaint.css";
+import "./complaint.css";
+
 
 const DEPARTMENTS = ["ঢাকা", "চট্টগ্রাম", "খুলনা", "রাজশাহী", "সিলেট", "বরিশাল", "রংপুর", "ময়মনসিংহ"];
 
@@ -58,6 +60,7 @@ function Complaint() {
       district: district,
       description: description.trim(),
       location: location ? { lat: location.lat, lng: location.lng } : null
+
     };
     
     try {
