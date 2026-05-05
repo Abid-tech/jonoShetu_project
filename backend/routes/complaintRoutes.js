@@ -7,7 +7,9 @@ const {
   getComplaintById,
   getComplaintsByPriority,    // NEW
   getComplaintStats,          // NEW
-  updateComplaintStatus       // NEW
+  updateComplaintStatus,       // NEW
+  assignPersonnel,      // NEW
+  unassignPersonnel     // NEW
 } = require("../controller/complaintController");
 
 router.post("/", createComplaint);
@@ -16,5 +18,9 @@ router.get("/by-priority", getComplaintsByPriority);    // NEW: GET /complaints/
 router.get("/stats", getComplaintStats);                // NEW: GET /complaints/stats
 router.get("/:id", getComplaintById);
 router.patch("/:id/status", updateComplaintStatus);     // NEW: PATCH /complaints/:id/status
-router.patch("/:id/status", updateComplaintStatus); 
+router.patch("/:id/assign", assignPersonnel);      // NEW route
+router.patch("/:id/unassign", unassignPersonnel); 
 module.exports = router;
+
+
+

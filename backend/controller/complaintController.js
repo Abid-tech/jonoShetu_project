@@ -277,3 +277,71 @@ exports.updateComplaintStatus = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+// Assign personnel to complaint
+exports.assignPersonnel = async (req, res) => {
+  try {
+    const { assignedTo } = req.body;
+    const complaint = await Complaint.findByIdAndUpdate(
+      req.params.id,
+      { 
+        assignedTo: assignedTo,
+        lastUpdated: new Date()
+      },
+      { new: true }
+    );
+    
+    if (!complaint) {
+      return res.status(404).json({ error: "Complaint not found" });
+    }
+    
+    res.json({
+      success: true,
+      message: "কর্মী বরাদ্দ করা হয়েছে",
+      data: complaint
+    });
+  } catch (err) {
+    console.error('Error assigning personnel:', err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Unassign personnel from complaint
+exports.unassignPersonnel = async (req, res) => {
+  try {
+    const complaint = await Complaint.findByIdAndUpdate(
+      req.params.id,
+      { 
+        assignedTo: null,
+        lastUpdated: new Date()
+      },
+      { new: true }
+    );
+    
+    if (!complaint) {
+      return res.status(404).json({ error: "Complaint not found" });
+    }
+    
+    res.json({
+      success: true,
+      message: "বরাদ্দ বাতিল করা হয়েছে",
+      data: complaint
+    });
+  } catch (err) {
+    console.error('Error unassigning personnel:', err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+// Get complaints by user ID
+exports.getComplaintsByUser = async (req, res) => {
+  try {
+    const complaints = await Complaint.find({ userId: req.params.userId })
+      .sort({ createdAt: -1 });
+    res.json(complaints);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

@@ -55,6 +55,11 @@ const complaintSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
+  // ADD THIS - assigned personnel field
+  assignedTo: {
+    type: Object,
+    default: null
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -62,3 +67,6 @@ const complaintSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Complaint", complaintSchema);
+
+
+

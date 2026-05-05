@@ -1,12 +1,9 @@
 import { React, useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-<<<<<<< samia/features
 import "./complaint.css";
-=======
-import "./complaint.css"
-import { useNavigate } from "react-router-dom";
->>>>>>> development
+import "./complaint.css";
+
 
 const DEPARTMENTS = ["ঢাকা", "চট্টগ্রাম", "খুলনা", "রাজশাহী", "সিলেট", "বরিশাল", "রংপুর", "ময়মনসিংহ"];
 
@@ -41,7 +38,6 @@ const MapSelector = ({ location, setLocation }) => {
 };
 
 function Complaint() {
-<<<<<<< samia/features
   const [name, setName] = useState("");
   const [department, setDepartment] = useState("");
   const [district, setDistrict] = useState("");
@@ -49,11 +45,13 @@ function Complaint() {
   const [location, setLocation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null); // { type, message, data }
+  const [trackingId, setTrackingId] = useState(null);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setSubmitStatus(null);
+    setTrackingId(null);
     
     // Prepare complaint data
     const complaintData = {
@@ -62,37 +60,7 @@ function Complaint() {
       district: district,
       description: description.trim(),
       location: location ? { lat: location.lat, lng: location.lng } : null
-=======
 
-    const [name, setName] = useState("");
-    const [department, setDepartment] = useState("");
-    const [district, setDistrict] = useState("");
-    const [description, setDescription] = useState("");
-    const [locationFile, setLocationFile] = useState(null);
-    const locationRef = useRef(null);
-    const [location, setLocation] = useState(null); 
-    const navigate = useNavigate();
-
-    const handleFileSelect = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setLocationFile({ url: URL.createObjectURL(file), name: file.name });
-    e.target.value = "";
-    };
-
-    const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("অভিযোগ সফলভাবে জমা হয়েছে!");
-    setName("");
-    setDepartment("");
-    setDistrict("");
-    setDescription("");
-    setLocationFile(null);
-      e.preventDefault();
-  navigate("/assign-role", {
-    state: { name, dept: department, district, desc: description },
-  });
->>>>>>> development
     };
     
     try {
@@ -107,6 +75,10 @@ function Complaint() {
       const result = await response.json();
       
       if (response.ok) {
+        // Store the tracking ID (MongoDB _id)
+        const trackingId = result.data._id;
+        setTrackingId(trackingId);
+        
         // FEATURE 12 & 13: Display auto-assigned department and priority
         setSubmitStatus({
           type: "success",
@@ -121,8 +93,11 @@ function Complaint() {
         setDescription("");
         setLocation(null);
         
-        // Auto hide success message after 5 seconds
-        setTimeout(() => setSubmitStatus(null), 5000);
+        // Auto hide success message after 10 seconds (longer for tracking ID)
+        setTimeout(() => {
+          setSubmitStatus(null);
+          // Don't clear tracking ID immediately - let user copy it
+        }, 10000);
       } else {
         setSubmitStatus({
           type: "error",
@@ -137,6 +112,13 @@ function Complaint() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+  
+  const copyTrackingId = () => {
+    if (trackingId) {
+      navigator.clipboard.writeText(trackingId);
+      alert("ট্র্যাকিং আইডি কপি করা হয়েছে!");
     }
   };
   
@@ -181,23 +163,56 @@ function Complaint() {
                     </p>
                   </div>
                   
-                  {/* Status Message */}
-                  {submitStatus && (
-                    <div className={`alert alert-${submitStatus.type === 'success' ? 'success' : 'danger'} mb-3`} role="alert">
-                      <strong>{submitStatus.type === 'success' ? '✓' : '✕'}</strong> {submitStatus.message}
-                      {submitStatus.type === 'success' && submitStatus.data && (
-                        <div className="mt-2 small">
-                          <p className="mb-1"><strong>নিয়োজিত বিভাগ:</strong> {submitStatus.data.assignedDepartment}</p>
-                          <p className="mb-0"><strong>অগ্রাধিকার:</strong> 
-                            <span className={`badge bg-${submitStatus.data.priority === 'urgent' ? 'danger' : submitStatus.data.priority === 'high' ? 'warning' : submitStatus.data.priority === 'medium' ? 'info' : 'secondary'} ms-1`}>
-                              {submitStatus.data.priority === 'urgent' ? 'জরুরি' : 
-                               submitStatus.data.priority === 'high' ? 'উচ্চ' : 
-                               submitStatus.data.priority === 'medium' ? 'মাঝারি' : 'নিম্ন'}
-                            </span>
-                          </p>
-                          <p className="mb-0 mt-1 text-muted">ট্র্যাকিং আইডি: {submitStatus.data.trackingId}</p>
+                  {/* Success Message with Tracking ID */}
+                  {submitStatus && submitStatus.type === 'success' && (
+                    <div className="success-card mb-4">
+                      <div className="success-header">
+                        <span className="success-icon">✅</span>
+                        <h4>অভিযোগ সফলভাবে জমা হয়েছে!</h4>
+                      </div>
+                      <div className="tracking-section">
+                        <label>আপনার ট্র্যাকিং আইডি:</label>
+                        <div className="tracking-id-box">
+                          <code className="tracking-id">{trackingId}</code>
+                          <button 
+                            className="copy-btn"
+                            onClick={copyTrackingId}
+                            title="কপি করুন"
+                          >
+                            📋 কপি
+                          </button>
                         </div>
-                      )}
+                        <p className="tracking-note">
+                          ⚠️ এই আইডি সংরক্ষণ করুন। এই আইডি দিয়ে আপনি আপনার অভিযোগের অবস্থা জানতে পারবেন।
+                        </p>
+                      </div>
+                      <div className="assignment-info">
+                        <div className="info-row">
+                          <span>নিয়োজিত বিভাগ:</span>
+                          <strong>{submitStatus.data.assignedDepartment}</strong>
+                        </div>
+                        <div className="info-row">
+                          <span>অগ্রাধিকার:</span>
+                          <span className={`priority-tag priority-${submitStatus.data.priority}`}>
+                            {submitStatus.data.priority === 'urgent' ? 'জরুরি' : 
+                             submitStatus.data.priority === 'high' ? 'উচ্চ' : 
+                             submitStatus.data.priority === 'medium' ? 'মাঝারি' : 'নিম্ন'}
+                          </span>
+                        </div>
+                      </div>
+                      <button 
+                        className="track-now-btn"
+                        onClick={() => window.location.href = '/track'}
+                      >
+                        🔍 এখনই ট্র্যাক করুন
+                      </button>
+                    </div>
+                  )}
+                  
+                  {/* Error Message */}
+                  {submitStatus && submitStatus.type === 'error' && (
+                    <div className="alert alert-danger mb-3" role="alert">
+                      <strong>✕</strong> {submitStatus.message}
                     </div>
                   )}
                   
@@ -261,7 +276,7 @@ function Complaint() {
                       </select>
                     </div>
                     
-                    {/* FEATURE 13: Priority Preview */}
+                    {/* Priority Preview */}
                     {previewPriority && (
                       <div className="mb-3 p-2 rounded text-center" style={{ backgroundColor: previewPriority.bg }}>
                         <small className="text-muted">পূর্বাভাসিত অগ্রাধিকার:</small>
@@ -312,10 +327,10 @@ function Complaint() {
                       )}
                     </div>
                     
-                    {/* FEATURE 12: Auto-assignment notice */}
+                    {/* Auto-assignment notice */}
                     <div className="alert alert-info mb-3 small" role="alert">
                       <strong>ℹ️ তথ্য:</strong> আপনার জেলা অনুযায়ী স্বয়ংক্রিয়ভাবে সংশ্লিষ্ট বিভাগে অভিযোগটি পাঠানো হবে। 
-                      আপনি ট্র্যাকিং আইডি দিয়ে অভিযোগের অবস্থা জানতে পারবেন।
+                      অভিযোগ জমা দেওয়ার পর আপনি একটি ট্র্যাকিং আইডি পাবেন যা দিয়ে আপনার অভিযোগের অবস্থা জানতে পারবেন।
                     </div>
                     
                     {/* Submit Button */}

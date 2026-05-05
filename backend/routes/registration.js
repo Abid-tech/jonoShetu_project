@@ -1,18 +1,9 @@
-const express    = require("express");
-const router     = express.Router();
-const path = require("path");
-const upload = require(path.join(__dirname, "../middleware/upload"));
+const express = require("express");
+const router = express.Router();
 const { registerUser, checkNID } = require("../controller/registrationController");
 
-// POST /register
-router.post(
-  "/",
-  upload.fields([
-    { name: "frontImage", maxCount: 1 },
-    { name: "backImage",  maxCount: 1 },
-  ]),
-  registerUser
-);
+// POST /register (no image upload needed)
+router.post("/", registerUser);
 
 // GET /register/check/:nidNumber
 router.get("/check/:nidNumber", checkNID);

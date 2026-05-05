@@ -4,16 +4,15 @@ const bcrypt   = require("bcryptjs");
 const userSchema = new mongoose.Schema(
   {
     nidNumber:     { type: String, required: true, unique: true, trim: true },
-    fullName:      { type: String, default: "" },
+    fullName:      { type: String, required: true, default: "" },
     dateOfBirth:   { type: String, default: "" },
     fatherName:    { type: String, default: "" },
     motherName:    { type: String, default: "" },
     address:       { type: String, default: "" },
     bloodGroup:    { type: String, default: "" },
     phone:         { type: String, required: true, unique: true, trim: true },
+    role:          { type: String, enum: ['citizen', 'authority'], default: 'citizen' },
     password:      { type: String, required: true },
-    frontImageUrl: { type: String, required: true },
-    backImageUrl:  { type: String, required: true },
   },
   { timestamps: true }
 );
@@ -24,7 +23,7 @@ userSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, 10);
 });
 
-// Use this in your login controller
+// Compare password method
 userSchema.methods.comparePassword = async function (enteredPassword) {
   return bcrypt.compare(enteredPassword, this.password);
 };

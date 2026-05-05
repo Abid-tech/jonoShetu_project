@@ -479,6 +479,95 @@ body {
 .footer-tagline { font-size: 0.8rem;  color: rgba(255, 255, 255, 0.6); }
 .footer-copy    { font-size: 0.82rem; color: rgba(255, 255, 255, 0.5); }
 
+
+/* ── Role Selection Styles ───────────────────────────────── */
+.role-selection-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.role-option {
+  flex: 1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.role-option input {
+  display: none;
+}
+
+.role-option-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--off-white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.role-option.active .role-option-content {
+  background: var(--green-light);
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(0, 106, 78, 0.1);
+}
+
+.role-option:hover .role-option-content {
+  border-color: var(--green);
+  transform: translateY(-1px);
+}
+
+.role-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.role-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.role-text strong {
+  font-size: 1rem;
+  color: var(--text-dark);
+  font-weight: 700;
+}
+
+.role-text small {
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  line-height: 1.3;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .role-selection-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .role-option-content {
+    padding: 12px;
+  }
+  
+  .role-icon {
+    font-size: 28px;
+  }
+  
+  .role-text strong {
+    font-size: 0.9rem;
+  }
+  
+  .role-text small {
+    font-size: 0.7rem;
+  }
+}
+
 /* ── Lightbox ────────────────────────────────────────────── */
 .lightbox-overlay {
   position: fixed;
