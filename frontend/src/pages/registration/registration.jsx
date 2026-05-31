@@ -1,10 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import "./registration.css";
-
-const SLOTS = [
-  { key: "frontImage", label: "সামনের অংশ", hint: "এনআইডির সামনের ছবি" },
-  { key: "backImage",  label: "পেছনের অংশ", hint: "এনআইডির পেছনের ছবি" },
-];
 
 export default function Registration() {
   const [nidNumber,       setNidNumber]       = useState("");
@@ -15,33 +10,11 @@ export default function Registration() {
   const [address,         setAddress]         = useState("");
   const [bloodGroup,      setBloodGroup]      = useState("");
   const [phone,           setPhone]           = useState("");
+  const [role,            setRole]            = useState("citizen");
   const [password,        setPassword]        = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [photos,          setPhotos]          = useState([null, null]);
   const [fieldErrors,     setFieldErrors]     = useState({});
   const [status,          setStatus]          = useState(null);
-  const [lightbox,        setLightbox]        = useState(null);
-  const fileRefs = [useRef(), useRef()];
-
-  const handleSlotSelect = (index, file) => {
-    if (!file) return;
-    const preview = URL.createObjectURL(file);
-    setPhotos(prev => {
-      const next = [...prev];
-      next[index] = { file, preview, name: file.name };
-      return next;
-    });
-    setFieldErrors(prev => ({ ...prev, images: undefined }));
-  };
-
-  const handleDeletePhoto = (index) => {
-    setPhotos(prev => {
-      const next = [...prev];
-      next[index] = null;
-      return next;
-    });
-    if (fileRefs[index].current) fileRefs[index].current.value = "";
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,7 +25,6 @@ export default function Registration() {
     else if (!/^01[3-9]\d{8}$/.test(phone.trim())) errors.phone     = "সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01XXXXXXXXX)।";
     if (!password || password.length < 6)    errors.password        = "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।";
     if (password !== confirmPassword)         errors.confirmPassword = "পাসওয়ার্ড মিলছে না।";
-    if (!photos[0] || !photos[1])             errors.images          = "উভয় ছবি সংযুক্ত করুন।";
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -63,20 +35,24 @@ export default function Registration() {
     setStatus({ type: "loading", message: "তথ্য সংরক্ষণ করা হচ্ছে…" });
 
     try {
-      const payload = new FormData();
-      payload.append("nidNumber",   nidNumber.trim());
-      payload.append("fullName",    fullName.trim());
-      payload.append("dateOfBirth", dob);
-      payload.append("fatherName",  fatherName);
-      payload.append("motherName",  motherName);
-      payload.append("address",     address);
-      payload.append("bloodGroup",  bloodGroup);
-      payload.append("phone",       phone.trim());
-      payload.append("password",    password);
-      payload.append("frontImage",  photos[0].file);
-      payload.append("backImage",   photos[1].file);
+      const payload = {
+        nidNumber:   nidNumber.trim(),
+        fullName:    fullName.trim(),
+        dateOfBirth: dob,
+        fatherName:  fatherName,
+        motherName:  motherName,
+        address:     address,
+        bloodGroup:  bloodGroup,
+        phone:       phone.trim(),
+        role:        role,
+        password:    password,
+      };
 
-      const res  = await fetch("http://localhost:5000/register", { method: "POST", body: payload });
+      const res  = await fetch("http://localhost:5000/register", { 
+        method: "POST", 
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
       const data = await res.json();
 
       if (res.ok) {
@@ -95,10 +71,7 @@ export default function Registration() {
   const loading = status?.type === "loading";
 
   return (
-    <div
-      className="jonosetu-wrapper d-flex flex-column align-items-center justify-content-center py-5 px-3"
-      
-    >
+    <div className="jonosetu-wrapper d-flex flex-column align-items-center justify-content-center py-5 px-3">
       <div className="registration-card">
         <div className="card-body-inner">
 
@@ -111,7 +84,7 @@ export default function Registration() {
               </svg>
             </div>
             <h1 className="reg-title">নিবন্ধন করুন</h1>
-            <p className="reg-subtitle">আপনার তথ্য পূরণ করুন এবং এনআইডির ছবি দিন</p>
+            <p className="reg-subtitle">আপনার তথ্য পূরণ করুন এবং অ্যাকাউন্ট তৈরি করুন</p>
           </div>
 
           {/* Status banner */}
@@ -239,6 +212,45 @@ export default function Registration() {
               }
             </div>
 
+            {/* Role Selection */}
+            <div className="mb-3">
+              <label className="form-label-custom">আপনি কোন ধরণের ব্যবহারকারী? *</label>
+              <div className="role-selection-group">
+                <label className={`role-option ${role === "citizen" ? "active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="citizen"
+                    checked={role === "citizen"}
+                    onChange={(e) => setRole(e.target.value)}
+                    disabled={loading}
+                  />
+                  <div className="role-option-content">
+                    <div className="role-text">
+                      <strong>নাগরিক (Citizen)</strong>
+                      <small>অভিযোগ দায়ের ও ট্র্যাক করতে পারবেন</small>
+                    </div>
+                  </div>
+                </label>
+                <label className={`role-option ${role === "authority" ? "active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="authority"
+                    checked={role === "authority"}
+                    onChange={(e) => setRole(e.target.value)}
+                    disabled={loading}
+                  />
+                  <div className="role-option-content">
+                    <div className="role-text">
+                      <strong>কর্তৃপক্ষ (Authority)</strong>
+                      <small>অভিযোগ সমাধান ও ব্যবস্থাপনা করবেন</small>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
             {/* Password */}
             <div className="mb-3">
               <label className="form-label-custom">পাসওয়ার্ড *</label>
@@ -267,66 +279,6 @@ export default function Registration() {
               {fieldErrors.confirmPassword && <p className="field-error">{fieldErrors.confirmPassword}</p>}
             </div>
 
-            {/* Photo Upload */}
-            <div className="mb-3">
-              <label className="form-label-custom">এনআইডির ছবি *</label>
-              <p className="upload-hint">সামনের ও পেছনের ছবি আলাদাভাবে দিন (JPG/PNG, সর্বোচ্চ ৫MB)</p>
-              {fieldErrors.images && <p className="field-error">{fieldErrors.images}</p>}
-              <div className="row g-2">
-                {SLOTS.map((slot, i) => (
-                  <div className="col-6" key={slot.key}>
-                    <input
-                      ref={fileRefs[i]}
-                      type="file"
-                      accept="image/*"
-                      className="d-none"
-                      onChange={e => handleSlotSelect(i, e.target.files[0])}
-                    />
-                    <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--text-mid)", marginBottom: 6 }}>
-                      {slot.label}
-                    </p>
-                    {!photos[i] ? (
-                      <button
-                        type="button"
-                        className="slot-empty w-100"
-                        disabled={loading}
-                        onClick={() => fileRefs[i].current.click()}
-                      >
-                        <span className="slot-empty-icon">
-                          <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                            <rect x="3" y="3" width="18" height="18" rx="3"/>
-                            <circle cx="8.5" cy="8.5" r="1.5"/>
-                            <path d="M21 15l-5-5L5 21"/>
-                          </svg>
-                        </span>
-                        <span className="slot-empty-label">{slot.hint}</span>
-                        <span className="slot-empty-hint">ক্লিক করুন</span>
-                      </button>
-                    ) : (
-                      <div className="slot-filled">
-                        <div className="slot-preview" onClick={() => setLightbox(photos[i].preview)}>
-                          <img src={photos[i].preview} alt={slot.label} />
-                          <div className="slot-zoom-hint">
-                            <svg width="24" height="24" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24">
-                              <circle cx="11" cy="11" r="8"/>
-                              <path d="M21 21l-4.35-4.35"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <p className="slot-filename">{photos[i].name}</p>
-                        <div className="slot-actions">
-                          <button type="button" className="slot-btn slot-btn-reselect" disabled={loading}
-                                  onClick={() => fileRefs[i].current.click()}>পরিবর্তন</button>
-                          <button type="button" className="slot-btn slot-btn-delete" disabled={loading}
-                                  onClick={() => handleDeletePhoto(i)}>মুছুন</button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Submit */}
             <button type="submit" className="btn-register w-100 mt-2" disabled={loading}>
               {loading && <span className="spinner" />}
@@ -342,16 +294,6 @@ export default function Registration() {
 
         </div>
       </div>
-
-      {/* Lightbox */}
-      {lightbox && (
-        <div className="lightbox-overlay" onClick={() => setLightbox(null)}>
-          <div className="lightbox-content" onClick={e => e.stopPropagation()}>
-            <img src={lightbox} alt="preview" />
-            <button className="lightbox-close" onClick={() => setLightbox(null)}>✕</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
