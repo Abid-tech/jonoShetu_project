@@ -110,10 +110,31 @@ function Header() {
               </li>
 
               <li className="nav-item">
+                <Link className="nav-link" to="/legal-chat">
+                  আইনি সহায়তা
+                </Link>
+              </li>
+
+              <li className="nav-item">
                 <Link className="nav-link" to="/complaint">
                   অভিযোগ দায়ের
                 </Link>
               </li>
+
+              <li className="nav-item">
+                <Link className="nav-link" to="/notice-board">
+                   বিজ্ঞপ্তি বোর্ড
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link className="nav-link" to="/govt-links">
+                   সেবা পোর্টাল
+                </Link>
+              </li>
+
+             
+
 
               {!isLoggedIn && (
                 <li className="nav-item">
@@ -148,7 +169,7 @@ function Header() {
                       aria-expanded="false"
                       style={{ background: 'none', border: 'none', cursor: 'pointer' }}
                     >
-                      👤 {userName.length > 15 ? userName.substring(0, 15) + '...' : userName}
+                       {userName.length > 15 ? userName.substring(0, 15) + '...' : userName}
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end">
                       <li className="dropdown-item-text">

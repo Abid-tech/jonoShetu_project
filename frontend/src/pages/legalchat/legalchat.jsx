@@ -120,7 +120,7 @@ function LegalChat() {
         {/* Header */}
         <div className="chat-header">
           <h1>
-            <i>⚖️</i> জনসেতু লিগ্যাল সহকারী
+             জনসেতু লিগ্যাল সহকারী
           </h1>
           <p>
             বাংলাদেশের সংবিধান ও আইন সম্পর্কে জেনে নিন | Get answers about Bangladesh Constitution and Laws
@@ -133,7 +133,7 @@ function LegalChat() {
           {/* Sidebar - Suggested Questions */}
           <div className="suggestions-sidebar">
             <h3>
-              <i>💡</i> সাধারণ জিজ্ঞাসা
+               সাধারণ জিজ্ঞাসা
             </h3>
             <div className="suggestions-list">
               {suggestions.slice(0, 8).map((suggestion, idx) => (
@@ -147,7 +147,7 @@ function LegalChat() {
               ))}
             </div>
             <div style={{ marginTop: 16, fontSize: '0.7rem', color: '#aac4b8', textAlign: 'center' }}>
-              <i>🔍</i> প্রশ্নে ক্লিক করলেই টাইপ হবে
+               প্রশ্নে ক্লিক করলেই টাইপ হবে
             </div>
           </div>
 
@@ -199,7 +199,7 @@ function LegalChat() {
                   onClick={sendMessage}
                   disabled={isLoading || !inputValue.trim()}
                 >
-                  <i>📤</i> পাঠান
+                   পাঠান
                 </button>
               </div>
             </div>
@@ -208,9 +208,9 @@ function LegalChat() {
 
         {/* Info Footer */}
         <div className="chat-info">
-          <i>⚖️</i> এই তথ্য AI জেনারেটেড এবং শুধুমাত্র তথ্যের উদ্দেশ্যে। আইনি পরামর্শের জন্য পেশাদার আইনজীবীর সাথে পরামর্শ করুন।
+           এই তথ্য AI জেনারেটেড এবং শুধুমাত্র তথ্যের উদ্দেশ্যে। আইনি পরামর্শের জন্য পেশাদার আইনজীবীর সাথে পরামর্শ করুন।
           <br />
-          <i>🔒</i> No conversation history is stored | কোনো তথ্য সংরক্ষণ করা হয় না
+           No conversation history is stored | কোনো তথ্য সংরক্ষণ করা হয় না
         </div>
       </div>
     </div>

@@ -122,7 +122,7 @@ function Dashboard() {
   return (
     <div className="dashboard-wrapper">
       {/* Header */}
-      <h2 className="dashboard-title">📊 Complaint Analytics</h2>
+      <h2 className="dashboard-title"> Complaint Analytics</h2>
       <p className="dashboard-subtitle">Monthly trends and area-wise breakdown of submitted complaints</p>
 
       {/* Stat cards */}

@@ -1,35 +1,295 @@
-.notice-container {
-  width: 80%;
-  margin: auto;
-  padding: 20px;
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap");
+
+.notice-wrapper {
+  min-height: 100vh;
+  padding: 40px 20px;
+  font-family: "Noto Sans Bengali", sans-serif;
 }
 
-.notice-container h2 {
+/* Header Section */
+.notice-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  animation: slideDown 0.5s ease;
 }
 
+@keyframes slideDown {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.notice-icon-wrap {
+  width: 70px;
+  height: 70px;
+  background: rgba(63, 53, 53, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  backdrop-filter: blur(10px);
+}
+
+.notice-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notice-subtitle {
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+/* Loading State */
+.notice-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 15px;
+  font-family: "Noto Sans Bengali", sans-serif;
+}
+
+.notice-loading p {
+  color: white;
+  font-size: 1rem;
+}
+
+/* Category Filter */
+.notice-category-filter {
+  max-width: 800px;
+  margin: 0 auto 30px;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.filter-btn {
+  background: rgba(47, 44, 44, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(30, 25, 25, 0.3);
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-family: "Noto Sans Bengali", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(50, 43, 43, 0.25);
+  transform: translateY(-2px);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #006a4e, #008b62);
+  border-color: #006a4e;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 106, 78, 0.3);
+}
+
+/* Notices Grid Container */
+.notices-grid-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.notices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+/* Notice Card */
 .notice-card {
-  border: 1px solid #ddd;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  background: #f9f9f9;
-  transition: 0.2s;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.notice-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, #006a4e, #008b62);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.notice-card:hover::before {
+  transform: scaleX(1);
 }
 
 .notice-card:hover {
-  transform: scale(1.01);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.notice-meta {
-  font-size: 12px;
-  color: #666;
+/* Notice Card Header */
+.notice-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.notice-category-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  color: #2e7d32;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.notice-date {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.notice-date svg {
+  flex-shrink: 0;
+}
+
+/* Notice Title */
+.notice-title-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a2e26;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+/* Notice Content */
+.notice-content {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 0 0 15px 0;
+  flex: 1;
+}
+
+/* Notice Footer */
+.notice-footer {
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #e9ecef;
+}
+
+.notice-publisher {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #006a4e;
+  font-weight: 600;
+}
+
+/* No Notices Found */
+.no-notices {
+  text-align: center;
+  background: white;
+  border-radius: 20px;
+  padding: 60px 20px;
+  max-width: 500px;
+  margin: 40px auto 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.no-notices-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.no-notices h3 {
+  font-size: 1.3rem;
+  color: #333;
   margin-bottom: 10px;
 }
 
-.publisher {
-  font-size: 12px;
-  color: #333;
-  font-weight: bold;
+.no-notices p {
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .notice-wrapper {
+    padding: 20px 15px;
+  }
+
+  .notice-title {
+    font-size: 1.6rem;
+  }
+
+  .notice-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .notices-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .notice-card {
+    padding: 15px;
+  }
+
+  .notice-title-text {
+    font-size: 1rem;
+  }
+
+  .notice-content {
+    font-size: 0.85rem;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-buttons {
+    gap: 8px;
+  }
+  
+  .filter-btn {
+    padding: 5px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .notice-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

@@ -1,9 +1,8 @@
-import { React, useState, useRef } from "react";
+import { React, useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import "./complaint.css";
-import "./complaint.css";
-
 
 const DEPARTMENTS = ["ঢাকা", "চট্টগ্রাম", "খুলনা", "রাজশাহী", "সিলেট", "বরিশাল", "রংপুর", "ময়মনসিংহ"];
 
@@ -38,20 +37,64 @@ const MapSelector = ({ location, setLocation }) => {
 };
 
 function Complaint() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [department, setDepartment] = useState("");
   const [district, setDistrict] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null); // { type, message, data }
+  const [submitStatus, setSubmitStatus] = useState(null);
   const [trackingId, setTrackingId] = useState(null);
-  
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  // Check if user is logged in
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (!userData) {
+      navigate("/login");
+    } else {
+      setIsLoggedIn(true);
+      try {
+        const user = JSON.parse(userData);
+        // Auto-fill name if user is logged in
+        setName(user.fullName || "");
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
+    }
+    setCheckingAuth(false);
+  }, [navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+    
     setLoading(true);
     setSubmitStatus(null);
     setTrackingId(null);
+    
+    // Get user data for association
+    const userData = localStorage.getItem("user");
+    let userId = null;
+    let userNid = null;
+    let userPhone = null;
+    
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        userId = user.id;
+        userNid = user.nidNumber;
+        userPhone = user.phone;
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
+    }
     
     // Prepare complaint data
     const complaintData = {
@@ -59,8 +102,10 @@ function Complaint() {
       department: department,
       district: district,
       description: description.trim(),
-      location: location ? { lat: location.lat, lng: location.lng } : null
-
+      location: location ? { lat: location.lat, lng: location.lng } : null,
+      userId: userId,
+      userNid: userNid,
+      userPhone: userPhone
     };
     
     try {
@@ -79,7 +124,7 @@ function Complaint() {
         const trackingId = result.data._id;
         setTrackingId(trackingId);
         
-        // FEATURE 12 & 13: Display auto-assigned department and priority
+        // Display auto-assigned department and priority
         setSubmitStatus({
           type: "success",
           message: "অভিযোগ সফলভাবে জমা হয়েছে!",
@@ -87,16 +132,14 @@ function Complaint() {
         });
         
         // Reset form
-        setName("");
         setDepartment("");
         setDistrict("");
         setDescription("");
         setLocation(null);
         
-        // Auto hide success message after 10 seconds (longer for tracking ID)
+        // Auto hide success message after 10 seconds
         setTimeout(() => {
           setSubmitStatus(null);
-          // Don't clear tracking ID immediately - let user copy it
         }, 10000);
       } else {
         setSubmitStatus({
@@ -126,7 +169,6 @@ function Complaint() {
   const getPreviewPriority = () => {
     if (!department || !district) return null;
     
-    // Simple preview logic (matches backend calculation)
     let score = 0;
     const highPriorityDepts = ["ঢাকা", "চট্টগ্রাম"];
     const urgentDistricts = ["ঢাকা", "গাজীপুর", "নারায়ণগঞ্জ", "চট্টগ্রাম"];
@@ -141,6 +183,20 @@ function Complaint() {
   };
   
   const previewPriority = getPreviewPriority();
+  
+  // Show loading while checking authentication
+  if (checkingAuth) {
+    return (
+      <div className="complaint-wrapper">
+        <div className="complaint-loading">
+          <div className="spinner-border text-success" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p>যাচাই করা হচ্ছে...</p>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="complaint-wrapper">
@@ -167,7 +223,7 @@ function Complaint() {
                   {submitStatus && submitStatus.type === 'success' && (
                     <div className="success-card mb-4">
                       <div className="success-header">
-                        <span className="success-icon">✅</span>
+                        <span className="success-icon"></span>
                         <h4>অভিযোগ সফলভাবে জমা হয়েছে!</h4>
                       </div>
                       <div className="tracking-section">
@@ -179,11 +235,11 @@ function Complaint() {
                             onClick={copyTrackingId}
                             title="কপি করুন"
                           >
-                            📋 কপি
+                             কপি
                           </button>
                         </div>
                         <p className="tracking-note">
-                          ⚠️ এই আইডি সংরক্ষণ করুন। এই আইডি দিয়ে আপনি আপনার অভিযোগের অবস্থা জানতে পারবেন।
+                           এই আইডি সংরক্ষণ করুন। এই আইডি দিয়ে আপনি আপনার অভিযোগের অবস্থা জানতে পারবেন।
                         </p>
                       </div>
                       <div className="assignment-info">
@@ -204,7 +260,7 @@ function Complaint() {
                         className="track-now-btn"
                         onClick={() => window.location.href = '/track'}
                       >
-                        🔍 এখনই ট্র্যাক করুন
+                         এখনই ট্র্যাক করুন
                       </button>
                     </div>
                   )}
@@ -216,135 +272,138 @@ function Complaint() {
                     </div>
                   )}
                   
-                  <form onSubmit={handleSubmit}>
-                    {/* Name */}
-                    <div className="form-group-custom mb-3">
-                      <label className="form-label-custom" htmlFor="name">
-                        নাম *
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        className="form-control form-control-custom"
-                        placeholder="আপনার নাম লিখুন"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                        disabled={loading}
-                      />
-                    </div>
-                    
-                    {/* Department */}
-                    <div className="form-group-custom mb-3">
-                      <label className="form-label-custom" htmlFor="department">
-                        বিভাগ *
-                      </label>
-                      <select
-                        id="department"
-                        className="form-control form-control-custom"
-                        value={department}
-                        onChange={(e) => setDepartment(e.target.value)}
-                        required
-                        disabled={loading}
-                      >
-                        <option value="">বিভাগ নির্বাচন করুন</option>
-                        {DEPARTMENTS.map((dep, i) => (
-                          <option key={i} value={dep}>
-                            {dep}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    {/* District */}
-                    <div className="form-group-custom mb-3">
-                      <label className="form-label-custom" htmlFor="district">
-                        জেলা *
-                      </label>
-                      <select
-                        id="district"
-                        className="form-control form-control-custom"
-                        value={district}
-                        onChange={(e) => setDistrict(e.target.value)}
-                        required
-                        disabled={loading}
-                      >
-                        <option value="">জেলা নির্বাচন করুন</option>
-                        {DISTRICTS.map((dist, i) => (
-                          <option key={i} value={dist}>{dist}</option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    {/* Priority Preview */}
-                    {previewPriority && (
-                      <div className="mb-3 p-2 rounded text-center" style={{ backgroundColor: previewPriority.bg }}>
-                        <small className="text-muted">পূর্বাভাসিত অগ্রাধিকার:</small>
-                        <span className="badge ms-2" style={{ backgroundColor: previewPriority.text }}>
-                          {previewPriority.label}
-                        </span>
-                        <p className="small text-muted mt-1 mb-0">
-                          * আপনার অভিযোগের ধরণ ও এলাকা অনুযায়ী স্বয়ংক্রিয়ভাবে অগ্রাধিকার নির্ধারণ করা হবে
-                        </p>
-                      </div>
-                    )}
-                    
-                    {/* Description */}
-                    <div className="form-group-custom mb-3">
-                      <label className="form-label-custom" htmlFor="description">
-                        বিস্তারিত বিবরণ *
-                      </label>
-                      <textarea
-                        id="description"
-                        className="form-control form-control-custom"
-                        placeholder="আপনার অভিযোগের বিস্তারিত লিখুন (প্রয়োজনে ছবি সংযুক্ত করুন)"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        rows={4}
-                        required
-                        disabled={loading}
-                      />
-                    </div>
-                    
-                    {/* Location */}
-                    <div className="form-group-custom mb-4">
-                      <label className="form-label-custom">লোকেশন (ঐচ্ছিক)</label>
-                      <MapContainer 
-                        center={[23.685, 90.3563]} 
-                        zoom={7} 
-                        style={{ height: 300, width: '100%', borderRadius: '8px' }}
-                      >
-                        <TileLayer
-                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                          attribution="&copy; OpenStreetMap contributors"
+                  {/* Only show form if no successful submission */}
+                  {(!submitStatus || submitStatus.type !== 'success') && (
+                    <form onSubmit={handleSubmit}>
+                      {/* Name - auto-filled from login, but editable */}
+                      <div className="form-group-custom mb-3">
+                        <label className="form-label-custom" htmlFor="name">
+                          নাম *
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          className="form-control form-control-custom"
+                          placeholder="আপনার নাম লিখুন"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          required
+                          disabled={loading}
                         />
-                        <MapSelector location={location} setLocation={setLocation} />
-                      </MapContainer>
-                      {location && (
-                        <div className="mt-2 small text-success">
-                          ✓ লোকেশন নির্বাচিত: {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+                      </div>
+                      
+                      {/* Department */}
+                      <div className="form-group-custom mb-3">
+                        <label className="form-label-custom" htmlFor="department">
+                          বিভাগ *
+                        </label>
+                        <select
+                          id="department"
+                          className="form-control form-control-custom"
+                          value={department}
+                          onChange={(e) => setDepartment(e.target.value)}
+                          required
+                          disabled={loading}
+                        >
+                          <option value="">বিভাগ নির্বাচন করুন</option>
+                          {DEPARTMENTS.map((dep, i) => (
+                            <option key={i} value={dep}>
+                              {dep}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      
+                      {/* District */}
+                      <div className="form-group-custom mb-3">
+                        <label className="form-label-custom" htmlFor="district">
+                          জেলা *
+                        </label>
+                        <select
+                          id="district"
+                          className="form-control form-control-custom"
+                          value={district}
+                          onChange={(e) => setDistrict(e.target.value)}
+                          required
+                          disabled={loading}
+                        >
+                          <option value="">জেলা নির্বাচন করুন</option>
+                          {DISTRICTS.map((dist, i) => (
+                            <option key={i} value={dist}>{dist}</option>
+                          ))}
+                        </select>
+                      </div>
+                      
+                      {/* Priority Preview */}
+                      {previewPriority && (
+                        <div className="mb-3 p-2 rounded text-center" style={{ backgroundColor: previewPriority.bg }}>
+                          <small className="text-muted">পূর্বাভাসিত অগ্রাধিকার:</small>
+                          <span className="badge ms-2" style={{ backgroundColor: previewPriority.text }}>
+                            {previewPriority.label}
+                          </span>
+                          <p className="small text-muted mt-1 mb-0">
+                            * আপনার অভিযোগের ধরণ ও এলাকা অনুযায়ী স্বয়ংক্রিয়ভাবে অগ্রাধিকার নির্ধারণ করা হবে
+                          </p>
                         </div>
                       )}
-                    </div>
-                    
-                    {/* Auto-assignment notice */}
-                    <div className="alert alert-info mb-3 small" role="alert">
-                      <strong>ℹ️ তথ্য:</strong> আপনার জেলা অনুযায়ী স্বয়ংক্রিয়ভাবে সংশ্লিষ্ট বিভাগে অভিযোগটি পাঠানো হবে। 
-                      অভিযোগ জমা দেওয়ার পর আপনি একটি ট্র্যাকিং আইডি পাবেন যা দিয়ে আপনার অভিযোগের অবস্থা জানতে পারবেন।
-                    </div>
-                    
-                    {/* Submit Button */}
-                    <button type="submit" className="btn btn-submit w-100" disabled={loading}>
-                      {loading ? (
-                        <>
-                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                          জমা দেওয়া হচ্ছে...
-                        </>
-                      ) : (
-                        "অভিযোগ দায়ের করুন"
-                      )}
-                    </button>
-                  </form>
+                      
+                      {/* Description */}
+                      <div className="form-group-custom mb-3">
+                        <label className="form-label-custom" htmlFor="description">
+                          বিস্তারিত বিবরণ *
+                        </label>
+                        <textarea
+                          id="description"
+                          className="form-control form-control-custom"
+                          placeholder="আপনার অভিযোগের বিস্তারিত লিখুন"
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
+                          rows={4}
+                          required
+                          disabled={loading}
+                        />
+                      </div>
+                      
+                      {/* Location */}
+                      <div className="form-group-custom mb-4">
+                        <label className="form-label-custom">লোকেশন (ঐচ্ছিক)</label>
+                        <MapContainer 
+                          center={[23.685, 90.3563]} 
+                          zoom={7} 
+                          style={{ height: 300, width: '100%', borderRadius: '8px' }}
+                        >
+                          <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution="&copy; OpenStreetMap contributors"
+                          />
+                          <MapSelector location={location} setLocation={setLocation} />
+                        </MapContainer>
+                        {location && (
+                          <div className="mt-2 small text-success">
+                            ✓ লোকেশন নির্বাচিত: {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Auto-assignment notice */}
+                      <div className="alert alert-info mb-3 small" role="alert">
+                        <strong> তথ্য:</strong> আপনার জেলা অনুযায়ী স্বয়ংক্রিয়ভাবে সংশ্লিষ্ট বিভাগে অভিযোগটি পাঠানো হবে। 
+                        অভিযোগ জমা দেওয়ার পর আপনি একটি ট্র্যাকিং আইডি পাবেন যা দিয়ে আপনার অভিযোগের অবস্থা জানতে পারবেন।
+                      </div>
+                      
+                      {/* Submit Button */}
+                      <button type="submit" className="btn btn-submit w-100" disabled={loading}>
+                        {loading ? (
+                          <>
+                            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            জমা দেওয়া হচ্ছে...
+                          </>
+                        ) : (
+                          "অভিযোগ দায়ের করুন"
+                        )}
+                      </button>
+                    </form>
+                  )}
                 </div>
               </div>
             </div>
