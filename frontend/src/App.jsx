@@ -13,6 +13,10 @@ import NoticeBoard from "./pages/noticeboard/noticeBoard";
 import GovLinks from "./pages/govlinks/govLinks";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Authority from './pages/authority/authority';
+import LegalChat from './pages/legalchat/legalchat';
+import CitizenTrack from './pages/citizenTrack/CitizenTrack';
+
+// In your routes
 
 
 function App() {
@@ -35,9 +39,8 @@ function App() {
               <Route path="/govt-links" element={<GovLinks />} />
               <Route path="/Dashboard" element={<Dashboard />} />
               <Route path="/authority" element={<Authority />} />
-              <Route path="/admin/complaints" element={<ComplaintManagement />} />
-
-
+              <Route path="/legal-chat" element={<LegalChat />} />
+              <Route path="/track" element={<CitizenTrack />} />
             </Routes>
           </div>
 

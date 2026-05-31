@@ -1,7 +1,7 @@
 const VoteEvent = require("../models/voteEvent");
 const Vote = require("../models/vote");
 
-// Create voting event (Admin)
+// Create voting event (Admin only)
 exports.createEvent = async (req, res) => {
   try {
     const { question, startTime, endTime } = req.body;
@@ -41,28 +41,62 @@ exports.getEvents = async (req, res) => {
   }
 };
 
-// Vote (anonymous + area stored)
+// Get user's votes
+exports.getUserVotes = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const votes = await Vote.find({ userId });
+    res.json(votes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Check if user has voted in specific event
+exports.checkUserVote = async (req, res) => {
+  try {
+    const { userId, eventId } = req.params;
+    const vote = await Vote.findOne({ userId, eventId });
+    res.json({ hasVoted: !!vote });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Vote with user tracking and duplicate prevention
 exports.vote = async (req, res) => {
   try {
     const { id } = req.params;
-    const { vote, area } = req.body;
+    const { vote, area, userId, userNid, userName } = req.body;
 
     const event = await VoteEvent.findById(id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
 
     const now = new Date();
     if (now < event.startTime || now > event.endTime) {
       return res.status(400).json({ message: "Voting is closed" });
     }
 
+    // Check if user already voted
+    const existingVote = await Vote.findOne({ eventId: id, userId });
+    if (existingVote) {
+      return res.status(400).json({ message: "Already voted", error: "DUPLICATE_VOTE" });
+    }
+
     const newVote = new Vote({
       eventId: id,
+      userId,
+      userNid,
+      userName,
       area,
       choice: vote
     });
 
     await newVote.save();
 
-    res.json({ message: "Vote submitted anonymously" });
+    res.json({ message: "Vote submitted successfully", success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

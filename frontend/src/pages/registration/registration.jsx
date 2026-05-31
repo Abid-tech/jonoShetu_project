@@ -226,7 +226,6 @@ export default function Registration() {
                     disabled={loading}
                   />
                   <div className="role-option-content">
-                    <span className="role-icon">👤</span>
                     <div className="role-text">
                       <strong>নাগরিক (Citizen)</strong>
                       <small>অভিযোগ দায়ের ও ট্র্যাক করতে পারবেন</small>
@@ -243,7 +242,6 @@ export default function Registration() {
                     disabled={loading}
                   />
                   <div className="role-option-content">
-                    <span className="role-icon">🏛️</span>
                     <div className="role-text">
                       <strong>কর্তৃপক্ষ (Authority)</strong>
                       <small>অভিযোগ সমাধান ও ব্যবস্থাপনা করবেন</small>

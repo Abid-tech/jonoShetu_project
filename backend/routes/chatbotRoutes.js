@@ -50,3 +50,4 @@ router.get('/suggestions', (req, res) => {
 });
 
 module.exports = router;
+
