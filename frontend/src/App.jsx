@@ -1,3 +1,4 @@
+import ComplaintManagement from './pages/admin/ComplaintManagement';
 import { Routes, Route } from "react-router-dom";
 import './App.css'
 import Header from "./components/header/header";
